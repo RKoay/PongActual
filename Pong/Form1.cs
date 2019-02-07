@@ -28,13 +28,15 @@ namespace Pong
         //graphics objects for drawing
         SolidBrush drawBrush = new SolidBrush(Color.LightPink);
         SolidBrush drawScores = new SolidBrush(Color.White);
+        SolidBrush drawBlocks1 = new SolidBrush(Color.Black);
+        SolidBrush drawBlocks2 = new SolidBrush(Color.LightBlue);
         Font drawFont = new Font("Courier New", 10);
 
         // Sounds for game
         SoundPlayer scoreSound = new SoundPlayer(Properties.Resources.score);
         SoundPlayer collisionSound = new SoundPlayer(Properties.Resources.collision);
         //Adding a new sound
-      //  SoundPlayer paddleSound = new SoundPlayer(Properties.Resources.Metal_Clang_SoundBible_com_1363525732);
+        SoundPlayer paddleSound = new SoundPlayer(Properties.Resources.Metal_Clang_SoundBible_com_1363525732);
 
         //determines whether a key is being pressed or not
         Boolean aKeyDown, zKeyDown, jKeyDown, mKeyDown;
@@ -49,7 +51,7 @@ namespace Pong
         Rectangle ball;
 
         //paddle speeds and rectangles
-        const int PADDLE_SPEED = 40;
+        const int PADDLE_SPEED = 4;
         Rectangle p1, p2;
         Rectangle staticpaddle1;
         Rectangle staticpaddle2;
@@ -57,7 +59,9 @@ namespace Pong
         //player and game scores
         int player1Score = 0;
         int player2Score = 0;
-        int gameWinScore = 1;  // number of points needed to win game
+        int gameWinScore = 5;  // number of points needed to win game
+
+        
 
         #endregion
 
@@ -137,10 +141,10 @@ namespace Pong
             }
 
             //set starting position for paddles on new game and point scored 
-            const int PADDLE_EDGE = 20;  // buffer distance between screen edge and paddle            
+            const int PADDLE_EDGE = 20;  // buffer distance between screen edge and paddle      
 
-            p1.Width = p2.Width = 10;    //height for both paddles set the same
-            p1.Height = p2.Height = 40;  //width for both paddles set the same
+            p1.Width = p2.Width = 20;    //height for both paddles set the same
+            p1.Height = p2.Height = 60;  //width for both paddles set the same
 
             //p1 starting position
             p1.X = PADDLE_EDGE;
@@ -151,14 +155,15 @@ namespace Pong
             p2.Y = this.Height / 2 - p2.Height / 2;
 
             // Set Width and Height of ball
-            ball.Height = ball.Width = 10;
+            ball.Height = ball.Width = 20;
             // Set starting X position for ball to middle of screen, (use this.Width and ball.Width)
             ball.X = this.Width / 2 - ball.Width / 2;
             // Set starting Y position for ball to middle of screen, (use this.Height and ball.Height)
             ball.Y = this.Height / 2 - ball.Height / 2;
 
-            //Set width and height and position for two static paddles jhjh
-
+           
+            
+            
 
         }
 
@@ -281,7 +286,7 @@ namespace Pong
             if (ball.IntersectsWith(p1))
             {
                 ballMoveRight = true;
-                //paddleSound.Play();
+                paddleSound.Play();
             }
 
             // Create if statment that checks p2 collides with ball and if it does
@@ -290,9 +295,49 @@ namespace Pong
             if (ball.IntersectsWith(p2))
             {
                 ballMoveRight = false;
-               // paddleSound.Play();
+                paddleSound.Play();
             }
 
+            //Set width and height and position for two static paddles 
+            float sp1Width = 10;
+            float sp2Width = 10;
+            float sp1Height = 30;
+            float sp2Height = 30;
+            float sp1X = this.Width / 2 - sp1Width / 2;
+            float sp1Y = 20;
+            float sp2X = this.Width / 2 - sp2Width / 2;
+            float sp2Y = this.Height - 20 - sp2Height;
+
+            if (ball.IntersectsWith(staticpaddle1))
+            {
+                Graphics g = this.CreateGraphics();
+                g.FillRectangle(drawBlocks2, sp1X, sp1Y, sp1Width, sp1Height);
+                
+            }
+            if (ball.X + ball.Width == sp1X)
+            {
+                ballMoveRight = false;
+            }
+            if (ball.X == sp1X + sp1Width)
+            {
+                ballMoveRight = true;
+            }
+
+            if (ball.IntersectsWith(staticpaddle2))
+            {
+                Graphics g = this.CreateGraphics();
+                g.FillRectangle(drawBlocks2, sp2X, sp2Y, sp2Width, sp2Height);
+                //need to make it so that the ball can hit it in both directions 
+
+                if (ball.X + ball.Width == sp2X)
+                {
+                    ballMoveRight = false;
+                }
+                if (ball.X == sp2X + sp2Width)
+                {
+                    ballMoveRight = true; 
+                }
+            }
 
             /*  ENRICHMENT
              *  Instead of using two if statments as noted above see if you can create one
@@ -348,7 +393,7 @@ namespace Pong
             //refresh the screen, which causes the Form1_Paint method to run
             this.Refresh();
         }
-
+        
         /// <summary>
         /// Displays a message for the winner when the game is over and allows the user to either select
         /// to play again or end the program
@@ -384,8 +429,12 @@ namespace Pong
             // TODO draw ball using FillRectangle
             e.Graphics.FillEllipse(drawBrush, ball);
             // TODO draw scores to the screen using DrawString
-            e.Graphics.DrawString("Player 1 Score\n" + "      " + player1, drawFont, drawScores, 150, this.Height / 8);
-            e.Graphics.DrawString("Player 2 Score\n" + "      " + player2, drawFont, drawScores, this.Width - 460, this.Height / 8);
+            e.Graphics.DrawString("Player 1 Score\n" + "      " + player1, drawFont, drawScores, this.Width/8, this.Height / 8);
+            e.Graphics.DrawString("Player 2 Score\n" + "      " + player2, drawFont, drawScores, this.Width - this.Width/3, this.Height / 8);
+
+            //staticpaddles 
+            e.Graphics.FillRectangle(drawBlocks2, staticpaddle1);
+            e.Graphics.FillRectangle(drawBlocks2, staticpaddle2);
 
 
         }
