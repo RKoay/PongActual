@@ -157,7 +157,7 @@ namespace Pong
             // Set starting Y position for ball to middle of screen, (use this.Height and ball.Height)
             ball.Y = this.Height / 2 - ball.Height / 2;
 
-            //Set width and height and position for two static paddles 
+            //Set width and height and position for two static paddles jhjh
 
 
         }
