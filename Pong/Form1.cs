@@ -433,7 +433,7 @@ namespace Pong
             e.Graphics.DrawString("Player 2 Score\n" + "      " + player2, drawFont, drawScores, this.Width - this.Width/3, this.Height / 8);
 
             //staticpaddles 
-            e.Graphics.FillRectangle(drawBlocks2, staticpaddle1);
+            e.Graphics.FillRectangle(drawBlocks2, staticpaddle1);//
             e.Graphics.FillRectangle(drawBlocks2, staticpaddle2);
 
 
