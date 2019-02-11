@@ -28,8 +28,7 @@ namespace Pong
         //graphics objects for drawing
         SolidBrush drawBrush = new SolidBrush(Color.LightPink);
         SolidBrush drawScores = new SolidBrush(Color.White);
-        SolidBrush drawBlocks1 = new SolidBrush(Color.Black);
-        SolidBrush drawBlocks2 = new SolidBrush(Color.LightBlue);
+        SolidBrush drawBall = new SolidBrush(Color.LightBlue);
         Font drawFont = new Font("Courier New", 10);
 
         // Sounds for game
@@ -47,9 +46,10 @@ namespace Pong
         //ball directions, speed, and rectangle
         Boolean ballMoveRight = true;
         Boolean ballMoveDown = true;
-        const int BALL_SPEED = 4;
+        int BALL_SPEED = 4;
         Rectangle ball;
 
+        
         //paddle speeds and rectangles
         const int PADDLE_SPEED = 4;
         Rectangle p1, p2;
@@ -127,6 +127,7 @@ namespace Pong
 
 
 
+
         /// <summary>
         /// sets the ball and paddle positions for game start
         /// </summary>
@@ -143,8 +144,8 @@ namespace Pong
             //set starting position for paddles on new game and point scored 
             const int PADDLE_EDGE = 20;  // buffer distance between screen edge and paddle      
 
-            p1.Width = p2.Width = 20;    //height for both paddles set the same
-            p1.Height = p2.Height = 60;  //width for both paddles set the same
+            p1.Width = p2.Width = 15;    //height for both paddles set the same
+            p1.Height = p2.Height = 40;  //width for both paddles set the same
 
             //p1 starting position
             p1.X = PADDLE_EDGE;
@@ -158,10 +159,9 @@ namespace Pong
             ball.Height = ball.Width = 20;
             // Set starting X position for ball to middle of screen, (use this.Width and ball.Width)
             ball.X = this.Width / 2 - ball.Width / 2;
+
             // Set starting Y position for ball to middle of screen, (use this.Height and ball.Height)
             ball.Y = this.Height / 2 - ball.Height / 2;
-            
-
         }
         
 
@@ -190,6 +190,7 @@ namespace Pong
                 Graphics g = this.CreateGraphics();
                 g.FillEllipse(drawBrush, ball.X = ball.X - BALL_SPEED, ball.Y, ball.Width, ball.Height);
             }
+          
             if (ballMoveDown == true)
             {
                 //ball moves down 
@@ -202,8 +203,7 @@ namespace Pong
                 Graphics g = this.CreateGraphics();
                 g.FillEllipse(drawBrush, ball.X, ball.Y = ball.Y - BALL_SPEED, ball.Width, ball.Height);
             }
-
-
+            
 
             #endregion
 
@@ -268,6 +268,7 @@ namespace Pong
                 // TODO play a collision sound
                 collisionSound.Play();
                 this.BackColor = Color.Blue;
+                startLabel.Visible = false;
             }
             // TODO In an else if statement use ball.Y, this.Height, and ball.Width to check for collision with bottom line
             // If true use ballMoveDown down boolean to change direction
@@ -276,6 +277,7 @@ namespace Pong
                 ballMoveDown = false;
                 collisionSound.Play();
                 this.BackColor = Color.Green;
+                startLabel.Visible = false;
             }
 
             #endregion
@@ -287,6 +289,8 @@ namespace Pong
             // --- use ballMoveRight boolean to change direction
             if (ball.IntersectsWith(p1))
             {
+                startLabel.Visible = true;
+                startLabel.Text = "Nice!";
                 ballMoveRight = true;
                 paddleSound.Play();
                 this.BackColor = Color.DarkRed;
@@ -297,6 +301,8 @@ namespace Pong
             // --- use ballMoveRight boolean to change direction
             if (ball.IntersectsWith(p2))
             {
+                startLabel.Visible = true;
+                startLabel.Text = "Cool!";
                 ballMoveRight = false;
                 paddleSound.Play();
                 this.BackColor = Color.Black;
@@ -327,12 +333,17 @@ namespace Pong
                 {
                     GameOver("Player #2 wins");
                     this.BackColor = Color.Orange;
+                   
                 }
                 else
                 {
+                    BALL_SPEED = BALL_SPEED + 1;
                     ballMoveRight = true;
+                    startLabel.Visible = true;
+                    startLabel.Text = "Pfftt";
                     //SetParameters();
                     this.BackColor = Color.Orange;
+                    
                 }
 
 
@@ -343,6 +354,7 @@ namespace Pong
             {
                 scoreSound.Play();
                 player1Score = player1Score + 1;
+                
 
                 if (player1Score == gameWinScore)
                 {
@@ -351,6 +363,9 @@ namespace Pong
                 }
                 else
                 {
+                    startLabel.Visible = true;
+                    startLabel.Text = "Lol";
+                    BALL_SPEED = BALL_SPEED + 1;
                     ballMoveRight = false;
                     //SetParameters();
                     this.BackColor = Color.Brown;
@@ -385,7 +400,7 @@ namespace Pong
             // --- pause for two seconds 
             Thread.Sleep(2000);
             // --- use the startLabel to ask the user if they want to play again
-            startLabel.Text = "Do you want to play again ?\nPress Space To Start A New Game";
+            startLabel.Text = "Do you want to play again ?\nPress Space To Start and n to stop";
 
         }
 
@@ -393,12 +408,12 @@ namespace Pong
         {
             string player1 = player1Score.ToString();
             string player2 = player2Score.ToString();
-            // TODO draw paddles using FillRectangle
+            // Draw paddles using FillRectangle
             e.Graphics.FillRectangle(drawBrush, p1);
             e.Graphics.FillRectangle(drawBrush, p2);
-            // TODO draw ball using FillRectangle
+            // Draw ball using FillRectangle
             e.Graphics.FillEllipse(drawBrush, ball);
-            // TODO draw scores to the screen using DrawString
+            // Draw scores to the screen using DrawString
             e.Graphics.DrawString("Player 1 Score\n" + "      " + player1, drawFont, drawScores, this.Width/16, this.Height / 8);
             e.Graphics.DrawString("Player 2 Score\n" + "      " + player2, drawFont, drawScores, this.Width - this.Width/3, this.Height / 8);
 
