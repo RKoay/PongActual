@@ -46,12 +46,12 @@ namespace Pong
         //ball directions, speed, and rectangle
         Boolean ballMoveRight = true;
         Boolean ballMoveDown = true;
-        int BALL_SPEED = 4;
+        int BALL_SPEED = 9;
         Rectangle ball;
 
         
         //paddle speeds and rectangles
-        const int PADDLE_SPEED = 4;
+        const int PADDLE_SPEED = 6;
         Rectangle p1, p2;
 
         //player and game scores
@@ -68,6 +68,7 @@ namespace Pong
         public Form1()
         {
             InitializeComponent();
+            startLabel.Font = new Font("Tahoma", 12);
         }
 
         // -- YOU DO NOT NEED TO MAKE CHANGES TO THIS METHOD
@@ -144,8 +145,8 @@ namespace Pong
             //set starting position for paddles on new game and point scored 
             const int PADDLE_EDGE = 20;  // buffer distance between screen edge and paddle      
 
-            p1.Width = p2.Width = 15;    //height for both paddles set the same
-            p1.Height = p2.Height = 40;  //width for both paddles set the same
+            p1.Width = p2.Width = 30;    //height for both paddles set the same
+            p1.Height = p2.Height = 100;  //width for both paddles set the same
 
             //p1 starting position
             p1.X = PADDLE_EDGE;
@@ -156,7 +157,7 @@ namespace Pong
             p2.Y = this.Height / 2 - p2.Height / 2;
 
             // Set Width and Height of ball
-            ball.Height = ball.Width = 20;
+            ball.Height = ball.Width = 70;
             // Set starting X position for ball to middle of screen, (use this.Width and ball.Width)
             ball.X = this.Width / 2 - ball.Width / 2;
 
@@ -343,7 +344,6 @@ namespace Pong
                     startLabel.Text = "Pfftt";
                     //SetParameters();
                     this.BackColor = Color.Orange;
-                    
                 }
 
 
@@ -400,7 +400,8 @@ namespace Pong
             // --- pause for two seconds 
             Thread.Sleep(2000);
             // --- use the startLabel to ask the user if they want to play again
-            startLabel.Text = "Do you want to play again ?\nPress Space To Start and n to stop";
+            
+            startLabel.Text = "Do you want to play again ? Press Space To Start and n to stop";
 
         }
 
